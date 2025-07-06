@@ -1,9 +1,9 @@
-import NxWelcome from './nx-welcome';
+import { PageHeader } from '@/components/page-header';
 
 export function App() {
   return (
-    <div>
-      <NxWelcome title="@bloqit-fe-challenge/pokedex" />
+    <div className="container mx-auto p-4 max-w-7xl">
+      <PageHeader />
     </div>
   );
 }
