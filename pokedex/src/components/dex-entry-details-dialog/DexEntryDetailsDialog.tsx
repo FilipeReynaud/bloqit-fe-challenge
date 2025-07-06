@@ -18,7 +18,7 @@ import { Pokeball } from '@/components/pokeball';
 import type { PokemonType } from '@/shared';
 
 type PokemonStat = {
-  baseStat: number;
+  base_stat: number;
   stat: {
     name: string;
   };
@@ -162,7 +162,7 @@ export const DexEntryDetailsDialog = ({
               <RadarChart
                 data={stats.map((stat) => ({
                   stat: stat.stat.name,
-                  value: stat.baseStat,
+                  value: stat.base_stat,
                 }))}
               />
             </div>
