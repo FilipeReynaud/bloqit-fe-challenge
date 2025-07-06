@@ -1,0 +1,10 @@
+{
+  "name": "@bloqit-fe-challenge/pokedex-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@bloqit-fe-challenge/pokedex"
+    ]
+  }
+}
