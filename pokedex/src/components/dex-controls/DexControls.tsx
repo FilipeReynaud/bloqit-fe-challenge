@@ -104,7 +104,7 @@ export const DexControls = () => {
           variant={showOnlyCaught ? 'default' : 'outline'}
           size="sm"
           onClick={() =>
-            updateParam('caughtOnly', showOnlyCaught ? 'false' : 'true')
+            updateParam('caughtOnly', showOnlyCaught ? '' : 'true')
           }
         >
           <Star className="w-4 h-4 mr-1" />

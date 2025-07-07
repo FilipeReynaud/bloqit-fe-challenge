@@ -22,7 +22,7 @@ export const PageHeader = ({ caughtCount, totalCount }: PageHeaderProps) => {
           </span>
           <span>{progressPercentage.toFixed(1)}%</span>
         </div>
-        <Progress value={progressPercentage} className="h-2" />
+        <Progress value={progressPercentage} />
       </div>
     </div>
   );

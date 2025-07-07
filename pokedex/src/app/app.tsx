@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { usePokedex } from '@/providers/pokemon.provider';
+import { usePokemonData } from '@/providers/pokemon.provider';
 import { DexEntryCard } from '@/components/dex-entry-card';
 import { DexEntryDetailsDialog } from '@/components/dex-entry-details-dialog';
 import { LoadingScreen } from '@/components/loading-screen';
@@ -8,7 +8,7 @@ import { DexControls } from '@/components/dex-controls';
 import type { PokemonDto } from '@/services/pokemon';
 
 export function App() {
-  const { pokemonData, isLoadingPokedex } = usePokedex();
+  const { pokemonData, totalNrOfPokemon, isLoadingPokedex } = usePokemonData();
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonDto | null>(
     null
   );
@@ -28,10 +28,10 @@ export function App() {
 
   return (
     <div className="container mx-auto p-4 max-w-7xl">
-      <PageHeader totalCount={pokemonData?.length ?? 0} caughtCount={100} />
+      <PageHeader totalCount={totalNrOfPokemon} caughtCount={100} />
       <DexControls />
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {pokemonData?.map((pokemon) => (
+        {pokemonData.map((pokemon) => (
           <DexEntryCard
             key={pokemon.name}
             pokemon={pokemon}
