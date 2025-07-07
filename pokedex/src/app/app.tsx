@@ -4,6 +4,7 @@ import { DexEntryCard } from '@/components/dex-entry-card';
 import { DexEntryDetailsDialog } from '@/components/dex-entry-details-dialog';
 import { LoadingScreen } from '@/components/loading-screen';
 import { PageHeader } from '@/components/page-header';
+import { DexControls } from '@/components/dex-controls';
 import {
   getAll,
   type GetAllDto,
@@ -37,14 +38,16 @@ export function App() {
 
   return (
     <div className="container mx-auto p-4 max-w-7xl">
-      <PageHeader />
+      <PageHeader totalCount={data?.length ?? 0} caughtCount={100} />
+      <DexControls />
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
         {data?.map((pokemon) => (
           <DexEntryCard
+            key={pokemon.name}
             name={pokemon.name}
             dexId={pokemon.id.toString()}
             types={pokemon.types.map((type) => type.type.name)}
-            sprite={pokemon.sprites.front_default}
+            sprite={pokemon.sprites.other['official-artwork'].front_default}
             isChecked={false}
             isCaught={true}
             onPokemonClick={() => onSelectPokemon(pokemon)}
@@ -65,7 +68,7 @@ export function App() {
           height={selectedPokemon.height}
           weight={selectedPokemon.weight}
           stats={selectedPokemon.stats}
-          gallerySprites={Object.values(selectedPokemon.sprites)}
+          gallerySprites={[]}
           isCaught={true}
           toggleCaught={() => null}
           onShare={() => null}

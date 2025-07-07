@@ -1,10 +1,11 @@
 import { Progress } from '@/components/ui';
 import { Status } from '@/components/status';
 
-export const PageHeader = () => {
-  const caughtCount = 10;
-  const totalCount = 700;
-
+export interface PageHeaderProps {
+  caughtCount: number;
+  totalCount: number;
+}
+export const PageHeader = ({ caughtCount, totalCount }: PageHeaderProps) => {
   const progressPercentage =
     totalCount > 0 ? (caughtCount / totalCount) * 100 : 0;
 

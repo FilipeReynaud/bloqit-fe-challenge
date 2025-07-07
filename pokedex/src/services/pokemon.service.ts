@@ -20,6 +20,11 @@ type PokemonGetDataResult = {
     back_shiny: string;
     front_default: string;
     front_shiny: string;
+    other: {
+      'official-artwork': {
+        front_default: string;
+      };
+    };
   };
   stats: { base_stat: number; stat: { name: string } }[];
   types: {
@@ -48,8 +53,7 @@ const getPokemonDescription = async (speciesUrl: SpeciesUrl) => {
 };
 
 export const getAll = async (): Promise<GetAllDto> => {
-  const data: PokemonGetAllResult = await api.get('pokemon');
-  console.log(data);
+  const data: PokemonGetAllResult = await api.get('pokemon-species?limit=151');
 
   const pokemonDetails = await Promise.all(
     data.results.map(async ({ url }) => {

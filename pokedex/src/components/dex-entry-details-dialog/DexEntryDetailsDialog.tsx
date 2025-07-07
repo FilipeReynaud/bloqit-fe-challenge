@@ -115,7 +115,10 @@ export const DexEntryDetailsDialog = ({
 }: DexEntryDetailsDialogProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+      <DialogContent
+        aria-describedby={undefined}
+        className="max-w-2xl max-h-[80vh] overflow-y-auto"
+      >
         <DialogHeader>
           <DialogTitle className="flex gap-4 capitalize text-2xl items-center">
             <Pokeball isCaught={isCaught} />
@@ -187,7 +190,10 @@ export const DexEntryDetailsDialog = ({
               <h3 className="font-semibold mb-3">Sprite Gallery</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {gallerySprites.map((sprite) => (
-                  <div className="text-center p-3 bg-muted/30 rounded">
+                  <div
+                    key={sprite}
+                    className="text-center p-3 bg-muted/30 rounded"
+                  >
                     <img
                       src={sprite}
                       alt="Front"

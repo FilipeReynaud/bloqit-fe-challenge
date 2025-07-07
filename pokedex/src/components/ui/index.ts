@@ -7,3 +7,5 @@ export * from './chart';
 export * from './textarea';
 export * from './tabs';
 export * from './progress';
+export * from './input';
+export * from './select';
