@@ -1,18 +1,10 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-const FIVE_MIN_REFRESH_RATE = 5 * 60 * 1000;
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: FIVE_MIN_REFRESH_RATE,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+import { PokemonProvider } from './pokemon.provider';
+import { QueryProvider } from './query.provider';
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryProvider>
+      <PokemonProvider>{children}</PokemonProvider>
+    </QueryProvider>
   );
 };
