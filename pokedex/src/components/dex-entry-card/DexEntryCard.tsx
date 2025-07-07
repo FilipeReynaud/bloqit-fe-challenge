@@ -1,27 +1,13 @@
 import { Card, CardContent, Button, Checkbox, Badge } from '@/components/ui';
 import { Pokeball } from '@/components/pokeball';
-import { type PokemonType, TYPE_COLORS } from '@/shared';
+import { TYPE_COLORS } from '@/shared';
+import type { PokemonDto } from '@/services';
 
 export interface DexEntryCardProps {
   /**
-   * Pokemon name
+   * Pokemon data
    */
-  name: string;
-
-  /**
-   * Pokemon Pokedex ID
-   */
-  dexId: string;
-
-  /**
-   * Pokemon spirit
-   */
-  sprite: string;
-
-  /**
-   * Pokemon main types
-   */
-  types: PokemonType[];
+  pokemon: PokemonDto;
 
   /**
    * Wether the pokemon was caught
@@ -51,10 +37,7 @@ export interface DexEntryCardProps {
 }
 
 export const DexEntryCard = ({
-  name,
-  dexId,
-  sprite,
-  types,
+  pokemon,
   isCaught,
   onCatch,
   isChecked,
@@ -72,18 +55,22 @@ export const DexEntryCard = ({
         </Button>
       </div>
       <CardContent className="p-8 text-center" onClick={onPokemonClick}>
-        <img src={sprite} alt={name} className="w-20 h-20 mx-auto mb-2" />
-        <h3 className="font-semibold capitalize">{name}</h3>
+        <img
+          src={pokemon.sprites.other['official-artwork'].front_default}
+          alt={pokemon.name}
+          className="w-20 h-20 mx-auto mb-2"
+        />
+        <h3 className="font-semibold capitalize">{pokemon.name}</h3>
         <p className="text-sm text-muted-foreground">
-          #{dexId.toString().padStart(3, '0')}
+          #{pokemon.id.toString().padStart(3, '0')}
         </p>
         <div className="flex gap-1 justify-center mt-2">
-          {types.map((type) => (
+          {pokemon.types.map((type) => (
             <Badge
-              key={type}
-              className={`${TYPE_COLORS[type]} text-white text-xs`}
+              key={type.type.name}
+              className={`${TYPE_COLORS[type.type.name]} text-white text-xs`}
             >
-              {type}
+              {type.type.name}
             </Badge>
           ))}
         </div>

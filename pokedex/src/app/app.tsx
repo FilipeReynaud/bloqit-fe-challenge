@@ -34,12 +34,9 @@ export function App() {
         {pokemonData?.map((pokemon) => (
           <DexEntryCard
             key={pokemon.name}
-            name={pokemon.name}
-            dexId={pokemon.id.toString()}
-            types={pokemon.types.map((type) => type.type.name)}
-            sprite={pokemon.sprites.other['official-artwork'].front_default}
+            pokemon={pokemon}
             isChecked={false}
-            isCaught={true}
+            isCaught={false}
             onPokemonClick={() => onSelectPokemon(pokemon)}
             onCheck={() => null}
           />
@@ -50,16 +47,8 @@ export function App() {
         <DexEntryDetailsDialog
           isOpen={isDetailsModalOpen}
           onOpenChange={closeDetailsModal}
-          name={selectedPokemon.name}
-          dexId={selectedPokemon.id.toString()}
-          types={selectedPokemon.types.map((type) => type.type.name)}
-          sprite={selectedPokemon.sprites.front_default}
-          description={selectedPokemon.description}
-          height={selectedPokemon.height}
-          weight={selectedPokemon.weight}
-          stats={selectedPokemon.stats}
-          gallerySprites={[]}
-          isCaught={true}
+          pokemon={selectedPokemon}
+          isCaught={false}
           toggleCaught={() => null}
           onShare={() => null}
         />

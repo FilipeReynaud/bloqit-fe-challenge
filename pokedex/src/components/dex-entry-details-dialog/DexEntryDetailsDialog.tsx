@@ -11,20 +11,18 @@ import {
   TabsTrigger,
   Textarea,
 } from '@/components/ui';
-import { StarOff, Star, Share2 } from 'lucide-react';
+import { Share2 } from 'lucide-react';
 import { TYPE_COLORS } from '@/shared';
 import { RadarChart } from '@/components/radar-chart';
 import { Pokeball } from '@/components/pokeball';
-import type { PokemonType } from '@/shared';
-
-type PokemonStat = {
-  base_stat: number;
-  stat: {
-    name: string;
-  };
-};
+import type { PokemonDto } from '@/services';
 
 export interface DexEntryDetailsDialogProps {
+  /**
+   * Pokemon data
+   */
+  pokemon: PokemonDto;
+
   /**
    * Whether the details dialog is open.
    */
@@ -35,51 +33,6 @@ export interface DexEntryDetailsDialogProps {
    * @param isOpen - The new open state.
    */
   onOpenChange: (isOpen: boolean) => void;
-
-  /**
-   * The name of the Pokémon.
-   */
-  name: string;
-
-  /**
-   * The Pokédex ID of the Pokémon.
-   */
-  dexId: string;
-
-  /**
-   * The URL of the Pokémon's sprite image.
-   */
-  sprite: string;
-
-  /**
-   * List of URL's for the available Pokémon's sprites.
-   */
-  gallerySprites: string[];
-
-  /**
-   * The description for the Pokemon.
-   */
-  description: string;
-
-  /**
-   * The height of the Pokémon, in meters.
-   */
-  height: number;
-
-  /**
-   * The weight of the Pokémon, in kilograms.
-   */
-  weight: number;
-
-  /**
-   * The Pokémon's types.
-   */
-  types: PokemonType[];
-
-  /**
-   * The Pokémon's base stats.
-   */
-  stats: PokemonStat[];
 
   /**
    * Whether the Pokémon is marked as caught.
@@ -100,19 +53,13 @@ export interface DexEntryDetailsDialogProps {
 export const DexEntryDetailsDialog = ({
   isOpen,
   onOpenChange,
-  name,
-  dexId,
-  description,
-  sprite,
-  gallerySprites,
-  height,
-  weight,
-  types,
-  stats,
+  pokemon,
   isCaught,
   toggleCaught,
   onShare,
 }: DexEntryDetailsDialogProps) => {
+  const gallerySprites: string[] = [];
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
@@ -122,14 +69,16 @@ export const DexEntryDetailsDialog = ({
         <DialogHeader>
           <DialogTitle className="flex gap-4 capitalize text-2xl items-center">
             <Pokeball isCaught={isCaught} />
-            {name} #{dexId.padStart(3, '0')}{' '}
+            {pokemon.name} #{pokemon.id.toString().padStart(3, '0')}{' '}
             <div className="flex gap-1">
-              {types.map((type) => (
+              {pokemon.types.map((type) => (
                 <Badge
-                  key={type}
-                  className={`${TYPE_COLORS[type]} text-white text-xs`}
+                  key={type.type.name}
+                  className={`${
+                    TYPE_COLORS[type.type.name]
+                  } text-white text-xs`}
                 >
-                  {type}
+                  {type.type.name}
                 </Badge>
               ))}
             </div>
@@ -147,12 +96,16 @@ export const DexEntryDetailsDialog = ({
 
           <TabsContent value="overview" className="space-y-6 mt-2">
             <div className="flex items-center justify-center">
-              <img src={sprite} alt={name} className="w-48 h-48" />
+              <img
+                src={pokemon.sprites.front_default}
+                alt={pokemon.name}
+                className="w-48 h-48"
+              />
             </div>
             <div>
               <h3 className="font-semibold mb-2">Description</h3>
               <p className="text-sm text-muted-foreground leading-relaxed bg-muted/50 p-4 rounded-lg">
-                {description}
+                {pokemon.description}
               </p>
             </div>
           </TabsContent>
@@ -163,7 +116,7 @@ export const DexEntryDetailsDialog = ({
           >
             <div className="h-[300px] w-[300px]">
               <RadarChart
-                data={stats.map((stat) => ({
+                data={pokemon.stats.map((stat) => ({
                   stat: stat.stat.name,
                   value: stat.base_stat,
                 }))}
@@ -177,11 +130,11 @@ export const DexEntryDetailsDialog = ({
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-2 bg-muted/30 rounded">
                   <span className="font-medium">Height:</span>
-                  <span>{height} m</span>
+                  <span>{pokemon.height / 10} m</span>
                 </div>
                 <div className="flex justify-between items-center p-2 bg-muted/30 rounded">
                   <span className="font-medium">Weight:</span>
-                  <span>{weight} kg</span>
+                  <span>{pokemon.weight / 10} kg</span>
                 </div>
               </div>
             </div>
@@ -243,20 +196,11 @@ export const DexEntryDetailsDialog = ({
           <div className="flex gap-2">
             <Button
               onClick={toggleCaught}
-              className="flex-1"
-              variant="destructive"
+              className="flex-1 hover:bg-green-600"
+              variant={isCaught ? 'destructive' : 'default'}
             >
-              {isCaught ? (
-                <>
-                  <StarOff className="w-4 h-4 mr-2" />
-                  Release
-                </>
-              ) : (
-                <>
-                  <Star className="w-4 h-4 mr-2" />
-                  Catch
-                </>
-              )}
+              <Pokeball isCaught={isCaught} />
+              {isCaught ? 'Release' : 'Catch!'}
             </Button>
             <Button variant="outline" onClick={onShare}>
               <Share2 className="w-4 h-4 mr-2" />
