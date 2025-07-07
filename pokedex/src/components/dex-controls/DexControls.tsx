@@ -1,11 +1,4 @@
 import { POKEMON_TYPES } from '@/shared';
-import { Checkbox } from '@radix-ui/react-checkbox';
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogTitle,
-} from '@radix-ui/react-dialog';
 import {
   Search,
   Grid,
@@ -17,6 +10,11 @@ import {
   Trash2,
 } from 'lucide-react';
 import {
+  Checkbox,
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
   Button,
   DialogHeader,
   Input,
@@ -26,14 +24,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui';
-import { useState } from 'react';
+
+import { useSearchParamsState } from '@/hooks';
 
 export const DexControls = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState('id');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [viewMode, setViewMode] = useState<'grid' | 'table' | 'cards'>('grid');
+  const {
+    searchTerm,
+    selectedTypes,
+    sortBy,
+    sortOrder,
+    viewMode,
+    showOnlyCaught,
+    updateParam,
+    updateTypes,
+  } = useSearchParamsState();
 
   return (
     <div className="mb-6 space-y-4">
@@ -44,14 +48,17 @@ export const DexControls = () => {
             <Input
               placeholder="Search Pokémon..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => updateParam('search', e.target.value)}
               className="pl-10"
             />
           </div>
         </div>
 
         <div className="flex gap-2">
-          <Select value={sortBy} onValueChange={setSortBy}>
+          <Select
+            value={sortBy}
+            onValueChange={(v) => updateParam('sortBy', v)}
+          >
             <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>
@@ -66,7 +73,9 @@ export const DexControls = () => {
 
           <Button
             variant="outline"
-            onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+            onClick={() =>
+              updateParam('sortOrder', sortOrder === 'asc' ? 'desc' : 'asc')
+            }
           >
             {sortOrder === 'asc' ? '↑' : '↓'}
           </Button>
@@ -78,30 +87,25 @@ export const DexControls = () => {
           <Button
             variant={viewMode === 'grid' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode('grid')}
+            onClick={() => updateParam('viewMode', 'grid')}
           >
             <Grid className="w-4 h-4" />
           </Button>
           <Button
-            variant={viewMode === 'cards' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setViewMode('cards')}
-          >
-            <List className="w-4 h-4" />
-          </Button>
-          <Button
             variant={viewMode === 'table' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode('table')}
+            onClick={() => updateParam('viewMode', 'table')}
           >
             <Table className="w-4 h-4" />
           </Button>
         </div>
 
         <Button
-          //   variant={showOnlyCaught ? 'default' : 'outline'}
+          variant={showOnlyCaught ? 'default' : 'outline'}
           size="sm"
-          //   onClick={() => setShowOnlyCaught(!showOnlyCaught)}
+          onClick={() =>
+            updateParam('caughtOnly', showOnlyCaught ? 'false' : 'true')
+          }
         >
           <Star className="w-4 h-4 mr-1" />
           Caught Only
@@ -114,7 +118,7 @@ export const DexControls = () => {
               Types
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby="types">
             <DialogHeader>
               <DialogTitle>Filter by Types</DialogTitle>
             </DialogHeader>
@@ -126,11 +130,9 @@ export const DexControls = () => {
                     checked={selectedTypes.includes(type)}
                     onCheckedChange={(checked) => {
                       if (checked) {
-                        setSelectedTypes([...selectedTypes, type]);
+                        updateTypes([...selectedTypes, type]);
                       } else {
-                        setSelectedTypes(
-                          selectedTypes.filter((t) => t !== type)
-                        );
+                        updateTypes(selectedTypes.filter((t) => t !== type));
                       }
                     }}
                   />
@@ -140,7 +142,7 @@ export const DexControls = () => {
                 </div>
               ))}
             </div>
-            <Button onClick={() => setSelectedTypes([])}>Clear All</Button>
+            <Button onClick={() => updateTypes([])}>Clear All</Button>
           </DialogContent>
         </Dialog>
 
