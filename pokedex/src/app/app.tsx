@@ -5,22 +5,18 @@ import { DexEntryDetailsDialog } from '@/components/dex-entry-details-dialog';
 import { LoadingScreen } from '@/components/loading-screen';
 import { PageHeader } from '@/components/page-header';
 import { DexControls } from '@/components/dex-controls';
-import {
-  getAll,
-  type GetAllDto,
-  type TPokemonData,
-} from '@/services/pokemon.service';
+import { fetchPokemon, type PokemonDto } from '@/services/pokemon';
 
 export function App() {
-  const [selectedPokemon, setSelectedPokemon] = useState<TPokemonData | null>(
+  const [selectedPokemon, setSelectedPokemon] = useState<PokemonDto | null>(
     null
   );
 
   const isDetailsModalOpen = !!selectedPokemon;
-  const { data, isLoading } = useQuery<GetAllDto>({
+  const { data, isLoading } = useQuery<PokemonDto[]>({
     queryKey: ['pokemon-details'],
-    queryFn: async (): Promise<GetAllDto> => {
-      return await getAll();
+    queryFn: async (): Promise<PokemonDto[]> => {
+      return await fetchPokemon();
     },
   });
 
@@ -32,7 +28,7 @@ export function App() {
     setSelectedPokemon(null);
   };
 
-  const onSelectPokemon = (pokemon: TPokemonData) => {
+  const onSelectPokemon = (pokemon: PokemonDto) => {
     setSelectedPokemon(pokemon);
   };
 
