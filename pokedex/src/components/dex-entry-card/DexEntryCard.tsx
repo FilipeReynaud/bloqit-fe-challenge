@@ -16,9 +16,9 @@ export interface DexEntryCardProps {
   isCaught?: boolean;
 
   /**
-   * Callback triggered on catch
+   * Callback triggered to toggle catch state (caught or not)
    */
-  onCatch?: () => void;
+  toogleCatch?: () => void;
 
   /**
    * If the card checkbox is checked
@@ -28,7 +28,7 @@ export interface DexEntryCardProps {
   /**
    * On check callback
    */
-  onCheck: (isChecked: boolean) => void;
+  onCheck: () => void;
 
   /**
    * Callback fired on click
@@ -39,7 +39,7 @@ export interface DexEntryCardProps {
 export const DexEntryCard = ({
   pokemon,
   isCaught,
-  onCatch,
+  toogleCatch,
   isChecked,
   onCheck,
   onPokemonClick,
@@ -47,10 +47,10 @@ export const DexEntryCard = ({
   return (
     <Card className="relative cursor-pointer hover:shadow-lg transition-shadow">
       <div className="absolute top-2 left-2 z-10">
-        <Checkbox checked={isChecked} onCheckedChange={onCheck} />
+        {isCaught && <Checkbox checked={isChecked} onCheckedChange={onCheck} />}
       </div>
       <div className="absolute top-2 right-2 z-10">
-        <Button variant="ghost" size="sm" onClick={onCatch} className="">
+        <Button variant="ghost" size="sm" onClick={toogleCatch} className="">
           <Pokeball isCaught={isCaught} />
         </Button>
       </div>

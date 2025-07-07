@@ -2,6 +2,7 @@ import { createContext, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPokemon, type PokemonDto } from '@/services/pokemon';
 import { useSearchParamsState } from '@/hooks';
+import { usePokedex } from './pokedex.provider';
 
 interface IPokemonContext {
   pokemonData: PokemonDto[];
@@ -18,6 +19,7 @@ export const PokemonProvider = ({
 }) => {
   const { searchTerm, selectedTypes, sortBy, sortOrder, showOnlyCaught } =
     useSearchParamsState();
+  const { caughtPokemon } = usePokedex();
 
   const { data, isLoading: isLoadingPokedex } = useQuery<PokemonDto[]>({
     queryKey: ['pokemon-details'],
@@ -43,6 +45,13 @@ export const PokemonProvider = ({
     if (shouldFilterBySearchString) {
       const isNameMatch = pokemon.name.includes(searchTerm);
       if (!isNameMatch) {
+        return false;
+      }
+    }
+
+    if (showOnlyCaught) {
+      const isCaught = !!caughtPokemon[pokemon.id];
+      if (!isCaught) {
         return false;
       }
     }

@@ -42,7 +42,7 @@ export interface DexEntryDetailsDialogProps {
   /**
    * Callback to toggle the caught state.
    */
-  toggleCaught: () => void;
+  toogleCatch: () => void;
 
   /**
    * Callback fired when the share action is triggered.
@@ -55,7 +55,7 @@ export const DexEntryDetailsDialog = ({
   onOpenChange,
   pokemon,
   isCaught,
-  toggleCaught,
+  toogleCatch,
   onShare,
 }: DexEntryDetailsDialogProps) => {
   const gallerySprites: string[] = [];
@@ -195,8 +195,8 @@ export const DexEntryDetailsDialog = ({
         <div className="space-y-6">
           <div className="flex gap-2">
             <Button
-              onClick={toggleCaught}
-              className="flex-1 hover:bg-green-600"
+              onClick={toogleCatch}
+              className={`flex-1 ${!isCaught ? 'hover:bg-green-600' : ''}`}
               variant={isCaught ? 'destructive' : 'default'}
             >
               <Pokeball isCaught={isCaught} />

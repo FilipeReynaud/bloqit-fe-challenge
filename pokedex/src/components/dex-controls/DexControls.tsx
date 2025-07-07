@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui';
-
+import { usePokedex } from '@/providers/pokedex.provider';
 import { useSearchParamsState } from '@/hooks';
 
 export const DexControls = () => {
@@ -38,6 +38,7 @@ export const DexControls = () => {
     updateParam,
     updateTypes,
   } = useSearchParamsState();
+  const { selectedPokemonIds, unSelectPokemon } = usePokedex();
 
   return (
     <div className="mb-6 space-y-4">
@@ -155,16 +156,16 @@ export const DexControls = () => {
           Export CSV
         </Button>
 
-        {/* {selectedPokemon.length > 0 && (
+        {selectedPokemonIds.length > 0 && (
           <Button
             variant="destructive"
             size="sm"
-            onClick={() => deletePokemon(selectedPokemon)}
+            onClick={() => unSelectPokemon(selectedPokemonIds)}
           >
             <Trash2 className="w-4 h-4 mr-1" />
-            Delete ({selectedPokemon.length})
+            Release Into The Wild ({selectedPokemonIds.length})
           </Button>
-        )} */}
+        )}
       </div>
     </div>
   );
