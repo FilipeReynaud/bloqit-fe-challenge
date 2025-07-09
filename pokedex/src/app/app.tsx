@@ -1,11 +1,11 @@
 import { usePokemonData } from '@/providers/pokemon.provider';
 import { LoadingScreen } from '@/components/loading-screen';
-import { PageHeader } from '@/components/page-header';
-import { DexControls } from '@/components/dex-controls';
+import { PageHeader } from './page-header';
+import { DexControls } from './dex-controls';
 import { Views } from './views';
 
 export function App() {
-  const { totalNrOfPokemon, isLoadingPokedex } = usePokemonData();
+  const { isLoadingPokedex } = usePokemonData();
 
   if (isLoadingPokedex) {
     return <LoadingScreen />;
@@ -13,7 +13,7 @@ export function App() {
 
   return (
     <div className="container mx-auto p-4 max-w-7xl">
-      <PageHeader totalCount={totalNrOfPokemon} caughtCount={100} />
+      <PageHeader />
       <DexControls />
       <Views />
     </div>

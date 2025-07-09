@@ -1,13 +1,15 @@
 import { Progress } from '@/components/ui';
 import { Status } from '@/components/status';
+import { usePokemonData } from '@/providers/pokemon.provider';
+import { usePokedex } from '@/providers/pokedex.provider';
 
-export interface PageHeaderProps {
-  caughtCount: number;
-  totalCount: number;
-}
-export const PageHeader = ({ caughtCount, totalCount }: PageHeaderProps) => {
+export const PageHeader = () => {
+  const { totalNrOfPokemon } = usePokemonData();
+  const { caughtPokemon } = usePokedex();
+
+  const caughtCount = Object.keys(caughtPokemon).length;
   const progressPercentage =
-    totalCount > 0 ? (caughtCount / totalCount) * 100 : 0;
+    totalNrOfPokemon > 0 ? (caughtCount / totalNrOfPokemon) * 100 : 0;
 
   return (
     <div className="mb-6">
@@ -18,7 +20,7 @@ export const PageHeader = ({ caughtCount, totalCount }: PageHeaderProps) => {
       <div className="mb-4">
         <div className="flex justify-between text-sm mb-2">
           <span>
-            Progress: {caughtCount}/{totalCount} Pokémon caught
+            Progress: {caughtCount}/{totalNrOfPokemon} Pokémon caught
           </span>
           <span>{progressPercentage.toFixed(1)}%</span>
         </div>
