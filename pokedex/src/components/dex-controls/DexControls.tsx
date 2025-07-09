@@ -38,7 +38,7 @@ export const DexControls = () => {
     updateParam,
     updateTypes,
   } = useSearchParamsState();
-  const { selectedPokemonIds, unSelectPokemon } = usePokedex();
+  const { selectedPokemonIds, releasePokemon } = usePokedex();
 
   return (
     <div className="mb-6 space-y-4">
@@ -160,7 +160,7 @@ export const DexControls = () => {
           <Button
             variant="destructive"
             size="sm"
-            onClick={() => unSelectPokemon(selectedPokemonIds)}
+            onClick={() => releasePokemon(selectedPokemonIds)}
           >
             <Trash2 className="w-4 h-4 mr-1" />
             Release Into The Wild ({selectedPokemonIds.length})

@@ -1,9 +1,7 @@
 import { DexEntryCard } from '@/components/dex-entry-card';
-import { LoadingScreen } from '@/components/loading-screen';
 import { usePokedex } from '@/providers/pokedex.provider';
 import { usePokemonData } from '@/providers/pokemon.provider';
 import { PokemonDto } from '@/services';
-import { useState } from 'react';
 
 export interface GridViewProps {
   onSelectPokemon: (pokemon: PokemonDto) => void;

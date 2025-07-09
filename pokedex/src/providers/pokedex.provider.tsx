@@ -6,11 +6,11 @@ type CaughtPokemon = {
 
 interface IPokedexContext {
   selectedPokemonIds: number[];
-  selectPokemon: (id: number) => void;
+  selectPokemon: (id: number | number[]) => void;
   unSelectPokemon: (id: number | number[]) => void;
   caughtPokemon: CaughtPokemon;
   catchPokemon: (id: number) => void;
-  releasePokemon: (id: number) => void;
+  releasePokemon: (id: number | number[]) => void;
 }
 
 const PokedexContext = createContext<IPokedexContext | null>(null);
@@ -23,8 +23,9 @@ export const PokedexProvider = ({
   const [selectedPokemonIds, setSelectedPokemonIds] = useState<number[]>([]);
   const [caughtPokemon, setCaughtPokemon] = useState<CaughtPokemon>({});
 
-  const selectPokemon = (id: number) => {
-    setSelectedPokemonIds((prev) => [...prev, id]);
+  const selectPokemon = (id: number | number[]) => {
+    const idsToSelect = typeof id === 'number' ? [id] : id;
+    setSelectedPokemonIds((prev) => [...prev, ...idsToSelect]);
   };
 
   const unSelectPokemon = (id: number | number[]) => {
@@ -32,7 +33,6 @@ export const PokedexProvider = ({
     setSelectedPokemonIds((prev) =>
       prev.filter((pokemonId) => !idsToFilter.includes(pokemonId))
     );
-    idsToFilter.forEach((id) => releasePokemon(id));
   };
 
   const catchPokemon = (id: number) => {
@@ -42,12 +42,16 @@ export const PokedexProvider = ({
     }));
   };
 
-  const releasePokemon = (id: number) => {
+  const releasePokemon = (id: number | number[]) => {
+    const idsToRelease = typeof id === 'number' ? [id] : id;
     setCaughtPokemon((prev) => {
       const copy = { ...prev };
-      delete copy[id];
+      idsToRelease.forEach((id) => {
+        delete copy[id];
+      });
       return copy;
     });
+    unSelectPokemon(idsToRelease);
   };
 
   return (

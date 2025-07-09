@@ -9,3 +9,6 @@ export * from './tabs';
 export * from './progress';
 export * from './input';
 export * from './select';
+export * from './table';
+export * from './dropdown-menu';
+export * from './tooltip';

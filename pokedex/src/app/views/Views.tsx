@@ -28,7 +28,7 @@ export const Views = () => {
       {viewMode === 'grid' ? (
         <GridView onSelectPokemon={onSelectPokemon} />
       ) : (
-        <TableView />
+        <TableView onSelectPokemon={onSelectPokemon} />
       )}
 
       {selectedPokemon && (
