@@ -1,6 +1,7 @@
 import { PokemonDto } from '@/services';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import type { PokemonType } from '@/shared';
 
 export type SortBy = keyof Pick<
   PokemonDto,
@@ -30,7 +31,7 @@ export const useSearchParamsState = (): UseSearchParamsState => {
   const searchTerm = searchParams.get('search') || '';
   const selectedTypes = useMemo(() => {
     const types = searchParams.get('types');
-    return types ? types.split(',').filter(Boolean) : [];
+    return (types ? types.split(',').filter(Boolean) : []) as PokemonType[];
   }, [searchParams]);
   const sortBy = (searchParams.get('sortBy') as SortBy) || DEFAULT_SORT_BY;
   const sortOrder =

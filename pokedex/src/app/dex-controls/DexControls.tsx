@@ -1,8 +1,7 @@
-import { POKEMON_TYPES } from '@/shared';
+import { POKEMON_TYPES, PokemonType } from '@/shared';
 import {
   Search,
   Grid,
-  List,
   Table,
   Star,
   Filter,
@@ -26,6 +25,7 @@ import {
 } from '@/components/ui';
 import { usePokedex } from '@/providers/pokedex.provider';
 import { useSearchParamsState } from '@/hooks';
+import { PokemonTypes } from '@/components/pokemon-types';
 
 export const DexControls = () => {
   const {
@@ -39,6 +39,8 @@ export const DexControls = () => {
     updateTypes,
   } = useSearchParamsState();
   const { selectedPokemonIds, releasePokemon } = usePokedex();
+
+  const btnClassNames = 'bg-blue-500 hover:bg-blue-500';
 
   return (
     <div className="mb-6 space-y-4">
@@ -89,6 +91,7 @@ export const DexControls = () => {
             variant={viewMode === 'grid' ? 'default' : 'outline'}
             size="sm"
             onClick={() => updateParam('viewMode', 'grid')}
+            className={viewMode === 'grid' ? btnClassNames : ''}
           >
             <Grid className="w-4 h-4" />
           </Button>
@@ -96,6 +99,7 @@ export const DexControls = () => {
             variant={viewMode === 'table' ? 'default' : 'outline'}
             size="sm"
             onClick={() => updateParam('viewMode', 'table')}
+            className={viewMode === 'table' ? btnClassNames : ''}
           >
             <Table className="w-4 h-4" />
           </Button>
@@ -103,6 +107,7 @@ export const DexControls = () => {
 
         <Button
           variant={showOnlyCaught ? 'default' : 'outline'}
+          className={showOnlyCaught ? btnClassNames : ''}
           size="sm"
           onClick={() =>
             updateParam('caughtOnly', showOnlyCaught ? '' : 'true')
@@ -117,6 +122,10 @@ export const DexControls = () => {
             <Button variant="outline" size="sm">
               <Filter className="w-4 h-4 mr-1" />
               Types
+              <PokemonTypes
+                types={selectedTypes as PokemonType[]}
+                maxNrOfTypes={3}
+              />
             </Button>
           </DialogTrigger>
           <DialogContent aria-describedby="types">
@@ -143,7 +152,9 @@ export const DexControls = () => {
                 </div>
               ))}
             </div>
-            <Button onClick={() => updateTypes([])}>Clear All</Button>
+            <Button onClick={() => updateTypes([])} className={btnClassNames}>
+              Clear All
+            </Button>
           </DialogContent>
         </Dialog>
 

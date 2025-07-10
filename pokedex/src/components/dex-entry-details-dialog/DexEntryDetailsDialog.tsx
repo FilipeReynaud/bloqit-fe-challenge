@@ -1,5 +1,4 @@
 import {
-  Badge,
   Button,
   Dialog,
   DialogContent,
@@ -12,9 +11,9 @@ import {
   Textarea,
 } from '@/components/ui';
 import { Share2 } from 'lucide-react';
-import { TYPE_COLORS } from '@/shared';
 import { RadarChart } from '@/components/radar-chart';
 import { Pokeball } from '@/components/pokeball';
+import { PokemonTypes } from '../pokemon-types';
 import type { PokemonDto } from '@/services';
 
 export interface DexEntryDetailsDialogProps {
@@ -70,18 +69,7 @@ export const DexEntryDetailsDialog = ({
           <DialogTitle className="flex gap-4 capitalize text-2xl items-center">
             <Pokeball isCaught={isCaught} />
             {pokemon.name} #{pokemon.id.toString().padStart(3, '0')}{' '}
-            <div className="flex gap-1">
-              {pokemon.types.map((type) => (
-                <Badge
-                  key={type.type.name}
-                  className={`${
-                    TYPE_COLORS[type.type.name]
-                  } text-white text-xs`}
-                >
-                  {type.type.name}
-                </Badge>
-              ))}
-            </div>
+            <PokemonTypes types={pokemon.types.map((type) => type.type.name)} />
           </DialogTitle>
         </DialogHeader>
         <Tabs defaultValue="overview" className="w-full">

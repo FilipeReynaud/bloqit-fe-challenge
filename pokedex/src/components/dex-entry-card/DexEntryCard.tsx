@@ -2,6 +2,7 @@ import { Card, CardContent, Button, Checkbox, Badge } from '@/components/ui';
 import { Pokeball } from '@/components/pokeball';
 import { TYPE_COLORS } from '@/shared';
 import type { PokemonDto } from '@/services';
+import { PokemonTypes } from '../pokemon-types';
 
 export interface DexEntryCardProps {
   /**
@@ -45,7 +46,7 @@ export const DexEntryCard = ({
   onPokemonClick,
 }: DexEntryCardProps) => {
   return (
-    <Card className="relative cursor-pointer hover:shadow-lg transition-shadow">
+    <Card className="relative cursor-pointer hover:shadow-lg transition-shadow hover:border-red-500">
       <div className="absolute top-2 left-2 z-10">
         {isCaught && <Checkbox checked={isChecked} onCheckedChange={onCheck} />}
       </div>
@@ -64,16 +65,7 @@ export const DexEntryCard = ({
         <p className="text-sm text-muted-foreground">
           #{pokemon.id.toString().padStart(3, '0')}
         </p>
-        <div className="flex gap-1 justify-center mt-2">
-          {pokemon.types.map((type) => (
-            <Badge
-              key={type.type.name}
-              className={`${TYPE_COLORS[type.type.name]} text-white text-xs`}
-            >
-              {type.type.name}
-            </Badge>
-          ))}
-        </div>
+        <PokemonTypes types={pokemon.types.map((type) => type.type.name)} />
       </CardContent>
     </Card>
   );
