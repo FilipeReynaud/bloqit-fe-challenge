@@ -17,6 +17,7 @@ export const TableView = ({ onSelectPokemon }: TableViewProps) => {
       meta={{
         onClick: onSelectPokemon,
       }}
+      noResultsText="No Pokémon found. Please adjust your criteria."
     />
   );
 };

@@ -1,3 +1,5 @@
+import { differenceInDays } from 'date-fns';
+import { Share2 } from 'lucide-react';
 import {
   Button,
   Dialog,
@@ -10,7 +12,6 @@ import {
   TabsTrigger,
   Textarea,
 } from '@/components/ui';
-import { Share2 } from 'lucide-react';
 import { RadarChart } from '@/components/radar-chart';
 import { Pokeball } from '@/components/pokeball';
 import { PokemonTypes } from '../pokemon-types';
@@ -34,9 +35,26 @@ export interface DexEntryDetailsDialogProps {
   onOpenChange: (isOpen: boolean) => void;
 
   /**
-   * Whether the Pokémon is marked as caught.
+   * The timestamp indicating when the Pokémon was caught.
+   * If defined, means the Pokemon was caught
+   * @default undefined
    */
-  isCaught: boolean;
+  caughtTimestamp?: Date;
+
+  /**
+   * Optional notes associated with catching this Pokémon.
+   */
+  caughtNotes?: string;
+
+  /**
+   /**
+    * Callback fired when a note is added or updated for a caught Pokémon.
+    *
+    * @param id - The unique identifier of the Pokémon.
+    * @param note - The note text to associate with the caught Pokémon.
+    * @returns void
+    */
+  onAddCaughtNote: (id: number, note: string) => void;
 
   /**
    * Callback to toggle the caught state.
@@ -53,10 +71,13 @@ export const DexEntryDetailsDialog = ({
   isOpen,
   onOpenChange,
   pokemon,
-  isCaught,
+  caughtTimestamp = undefined,
+  caughtNotes,
+  onAddCaughtNote,
   toogleCatch,
   onShare,
 }: DexEntryDetailsDialogProps) => {
+  const isCaught = !!caughtTimestamp;
   const gallerySprites: string[] = [];
 
   return (
@@ -155,16 +176,16 @@ export const DexEntryDetailsDialog = ({
                   <div className="flex justify-between">
                     <span>Days in collection:</span>
                     <span className="font-medium">
-                      {Math.floor(
-                        (Date.now() - new Date().getTime()) /
-                          (1000 * 60 * 60 * 24)
+                      {differenceInDays(
+                        new Date(),
+                        caughtTimestamp ?? new Date()
                       )}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Catch time:</span>
                     <span className="font-medium">
-                      {new Date().toLocaleTimeString()}
+                      {caughtTimestamp?.toLocaleTimeString()}
                     </span>
                   </div>
                 </div>
@@ -172,8 +193,12 @@ export const DexEntryDetailsDialog = ({
               <div>
                 <h3 className="font-semibold mb-3">Personal Notes</h3>
                 <Textarea
-                  placeholder={`Share your memories with this Pokémon ${name}`}
+                  placeholder={`Share your memories with this Pokémon ${pokemon.name}`}
                   className="min-h-[120px]"
+                  value={caughtNotes}
+                  onChange={(event) =>
+                    onAddCaughtNote(pokemon.id, event.target.value)
+                  }
                 />
               </div>
             </div>

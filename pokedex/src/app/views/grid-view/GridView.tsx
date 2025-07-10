@@ -18,6 +18,17 @@ export const GridView = ({ onSelectPokemon }: GridViewProps) => {
     releasePokemon,
   } = usePokedex();
 
+  const isEmpty = pokemonData.length === 0;
+  if (isEmpty) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-lg text-muted-foreground">
+          No Pokémon found. Please adjust your criteria.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
       {pokemonData.map((pokemon) => {

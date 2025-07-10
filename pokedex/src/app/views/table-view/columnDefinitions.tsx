@@ -195,7 +195,7 @@ export const columnDefinitions: ColumnDef<PokemonDto>[] = [
       const { caughtPokemon } = usePokedex();
 
       const id: number = row.getValue('id');
-      const caughtDate = caughtPokemon[id];
+      const caughtDate = caughtPokemon[id]?.timestamp;
       const isCaught = !!caughtDate;
 
       if (!isCaught) {

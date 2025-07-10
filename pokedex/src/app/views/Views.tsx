@@ -8,7 +8,8 @@ import { DexEntryDetailsDialog } from '@/components/dex-entry-details-dialog';
 
 export const Views = () => {
   const { viewMode } = useSearchParamsState();
-  const { caughtPokemon, catchPokemon, releasePokemon } = usePokedex();
+  const { caughtPokemon, catchPokemon, releasePokemon, onAddNote } =
+    usePokedex();
 
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonDto | null>(
     null
@@ -36,7 +37,9 @@ export const Views = () => {
           isOpen={isDetailsModalOpen}
           onOpenChange={closeDetailsModal}
           pokemon={selectedPokemon}
-          isCaught={!!caughtPokemon[selectedPokemon.id]}
+          caughtTimestamp={caughtPokemon[selectedPokemon.id]?.timestamp}
+          caughtNotes={caughtPokemon[selectedPokemon.id]?.notes}
+          onAddCaughtNote={onAddNote}
           toogleCatch={
             !!caughtPokemon[selectedPokemon.id]
               ? () => releasePokemon(selectedPokemon.id)

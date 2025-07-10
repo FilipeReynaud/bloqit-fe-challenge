@@ -1,7 +1,11 @@
 import { createContext, useContext, useState } from 'react';
 
+type CaughtInfo = {
+  timestamp: Date;
+  notes: string;
+};
 type CaughtPokemon = {
-  [k: string]: Date;
+  [k: string]: CaughtInfo;
 };
 
 interface IPokedexContext {
@@ -11,6 +15,7 @@ interface IPokedexContext {
   caughtPokemon: CaughtPokemon;
   catchPokemon: (id: number) => void;
   releasePokemon: (id: number | number[]) => void;
+  onAddNote: (id: number, note: string) => void;
 }
 
 const PokedexContext = createContext<IPokedexContext | null>(null);
@@ -38,7 +43,10 @@ export const PokedexProvider = ({
   const catchPokemon = (id: number) => {
     setCaughtPokemon((prev) => ({
       ...prev,
-      [id]: new Date(),
+      [id]: {
+        timestamp: new Date(),
+        notes: '',
+      },
     }));
   };
 
@@ -54,6 +62,16 @@ export const PokedexProvider = ({
     unSelectPokemon(idsToRelease);
   };
 
+  const onAddNote = (id: number, note: string) => {
+    setCaughtPokemon((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        notes: note,
+      },
+    }));
+  };
+
   return (
     <PokedexContext.Provider
       value={{
@@ -63,6 +81,7 @@ export const PokedexProvider = ({
         caughtPokemon,
         catchPokemon,
         releasePokemon,
+        onAddNote,
       }}
     >
       {children}
