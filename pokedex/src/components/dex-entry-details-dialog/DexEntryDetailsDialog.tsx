@@ -1,5 +1,4 @@
 import { differenceInDays } from 'date-fns';
-import { Share2 } from 'lucide-react';
 import {
   Button,
   Dialog,
@@ -14,7 +13,8 @@ import {
 } from '@/components/ui';
 import { RadarChart } from '@/components/radar-chart';
 import { Pokeball } from '@/components/pokeball';
-import { PokemonTypes } from '../pokemon-types';
+import { PokemonTypes } from '@/components/pokemon-types';
+import { SharePopover } from '@/components/share-popover';
 import type { PokemonDto } from '@/services';
 
 export interface DexEntryDetailsDialogProps {
@@ -60,11 +60,6 @@ export interface DexEntryDetailsDialogProps {
    * Callback to toggle the caught state.
    */
   toogleCatch: () => void;
-
-  /**
-   * Callback fired when the share action is triggered.
-   */
-  onShare: () => void;
 }
 
 export const DexEntryDetailsDialog = ({
@@ -75,10 +70,12 @@ export const DexEntryDetailsDialog = ({
   caughtNotes,
   onAddCaughtNote,
   toogleCatch,
-  onShare,
 }: DexEntryDetailsDialogProps) => {
   const isCaught = !!caughtTimestamp;
   const gallerySprites: string[] = [];
+
+  const currentBaseUrl = window.location.href.split('?')[0];
+  const shareableUrl = `${currentBaseUrl}?search=${pokemon.name}`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -215,10 +212,8 @@ export const DexEntryDetailsDialog = ({
               <Pokeball isCaught={isCaught} />
               {isCaught ? 'Release' : 'Catch!'}
             </Button>
-            <Button variant="outline" onClick={onShare}>
-              <Share2 className="w-4 h-4 mr-2" />
-              Share
-            </Button>
+
+            <SharePopover shareableUrl={shareableUrl} />
           </div>
         </div>
       </DialogContent>

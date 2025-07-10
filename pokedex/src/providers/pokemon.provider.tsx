@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { format } from 'date-fns';
 import {
   fetchPokemon,
   exportDataToCSV,
@@ -9,7 +10,6 @@ import {
 } from '@/services/pokemon';
 import { useSearchParamsState } from '@/hooks';
 import { usePokedex } from './pokedex.provider';
-import { format } from 'date-fns';
 
 interface IPokemonContext {
   pokemonData: PokemonDto[];

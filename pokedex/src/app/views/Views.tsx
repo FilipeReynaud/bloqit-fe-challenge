@@ -1,10 +1,10 @@
+import { useState } from 'react';
 import { useSearchParamsState } from '@/hooks';
 import { usePokedex } from '@/providers/pokedex.provider';
-import { PokemonDto } from '@/services';
-import { useState } from 'react';
+import { DexEntryDetailsDialog } from '@/components/dex-entry-details-dialog';
 import { GridView } from './grid-view';
 import { TableView } from './table-view';
-import { DexEntryDetailsDialog } from '@/components/dex-entry-details-dialog';
+import type { PokemonDto } from '@/services';
 
 export const Views = () => {
   const { viewMode } = useSearchParamsState();
@@ -45,7 +45,6 @@ export const Views = () => {
               ? () => releasePokemon(selectedPokemon.id)
               : () => catchPokemon(selectedPokemon.id)
           }
-          onShare={() => null}
         />
       )}
     </>
