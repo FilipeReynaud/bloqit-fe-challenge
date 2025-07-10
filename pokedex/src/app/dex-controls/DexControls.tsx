@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui';
+import { usePokemonData } from '@/providers/pokemon.provider';
 import { usePokedex } from '@/providers/pokedex.provider';
 import { useSearchParamsState } from '@/hooks';
 import { PokemonTypes } from '@/components/pokemon-types';
@@ -39,6 +40,7 @@ export const DexControls = () => {
     updateTypes,
   } = useSearchParamsState();
   const { selectedPokemonIds, releasePokemon } = usePokedex();
+  const { exportData } = usePokemonData();
 
   const btnClassNames = 'bg-blue-500 hover:bg-blue-500';
 
@@ -158,11 +160,7 @@ export const DexControls = () => {
           </DialogContent>
         </Dialog>
 
-        <Button
-          variant="outline"
-          size="sm"
-          // onClick={exportToCSV}
-        >
+        <Button variant="outline" size="sm" onClick={exportData}>
           <Download className="w-4 h-4 mr-1" />
           Export CSV
         </Button>

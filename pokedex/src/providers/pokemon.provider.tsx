@@ -1,13 +1,21 @@
 import { createContext, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchPokemon, type PokemonDto } from '@/services/pokemon';
+import {
+  fetchPokemon,
+  exportDataToCSV,
+  type PokemonDto,
+  type ExportPokemonDto,
+  Stats,
+} from '@/services/pokemon';
 import { useSearchParamsState } from '@/hooks';
 import { usePokedex } from './pokedex.provider';
+import { format } from 'date-fns';
 
 interface IPokemonContext {
   pokemonData: PokemonDto[];
   totalNrOfPokemon: number;
   isLoadingPokedex: boolean;
+  exportData: () => void;
 }
 
 const PokemonContext = createContext<IPokemonContext | null>(null);
@@ -68,12 +76,44 @@ export const PokemonProvider = ({
     return (pokemon1[sortBy] - pokemon2[sortBy]) * sortFactor;
   });
 
+  const exportData = () => {
+    const getStat = (stats: Stats, key: string) => {
+      const statIndex = stats.findIndex((stat) => stat.stat.name === key);
+      if (statIndex < 0) return 0;
+      return stats[statIndex].base_stat;
+    };
+
+    const data: ExportPokemonDto[] = pokemonData.map((pokemon) => {
+      return {
+        id: pokemon.id,
+        name: pokemon.name,
+        height: `${pokemon.height / 10} m`,
+        weight: `${pokemon.weight / 10} kg`,
+        types: pokemon.types.map((type) => type.type.name),
+        hp: getStat(pokemon.stats, 'hp'),
+        attack: getStat(pokemon.stats, 'attack'),
+        defense: getStat(pokemon.stats, 'defense'),
+        speed: getStat(pokemon.stats, 'speed'),
+        special_attack: getStat(pokemon.stats, 'special_attack'),
+        special_defense: getStat(pokemon.stats, 'special_defense'),
+        caught: caughtPokemon[pokemon.id] ? 'Yes' : 'No',
+        caught_at: caughtPokemon[pokemon.id]?.timestamp
+          ? format(caughtPokemon[pokemon.id]?.timestamp, 'dd/MM/yyyy')
+          : '--',
+        note: caughtPokemon[pokemon.id]?.notes ?? '--',
+      };
+    });
+
+    exportDataToCSV(data);
+  };
+
   return (
     <PokemonContext.Provider
       value={{
         pokemonData: sortedPokemon,
         totalNrOfPokemon: pokemonData.length,
         isLoadingPokedex,
+        exportData,
       }}
     >
       {children}
