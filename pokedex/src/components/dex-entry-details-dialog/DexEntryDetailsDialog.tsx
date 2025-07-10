@@ -72,7 +72,18 @@ export const DexEntryDetailsDialog = ({
   toogleCatch,
 }: DexEntryDetailsDialogProps) => {
   const isCaught = !!caughtTimestamp;
-  const gallerySprites: string[] = [];
+  const gallerySprites = {
+    ...(pokemon.sprites.back_default && { Back: pokemon.sprites.back_default }),
+    ...(pokemon.sprites.back_shiny && {
+      'Back Shiny': pokemon.sprites.back_shiny,
+    }),
+    ...(pokemon.sprites.front_default && {
+      Front: pokemon.sprites.front_default,
+    }),
+    ...(pokemon.sprites.front_shiny && {
+      'Front Shiny': pokemon.sprites.front_shiny,
+    }),
+  };
 
   const currentBaseUrl = window.location.href.split('?')[0];
   const shareableUrl = `${currentBaseUrl}?search=${pokemon.name}`;
@@ -145,24 +156,26 @@ export const DexEntryDetailsDialog = ({
               </div>
             </div>
 
-            <div>
-              <h3 className="font-semibold mb-3">Sprite Gallery</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {gallerySprites.map((sprite) => (
-                  <div
-                    key={sprite}
-                    className="text-center p-3 bg-muted/30 rounded"
-                  >
-                    <img
-                      src={sprite}
-                      alt="Front"
-                      className="w-20 h-20 mx-auto"
-                    />
-                    <p className="text-xs mt-1">Front</p>
-                  </div>
-                ))}
+            {Object.keys(gallerySprites).length > 0 && (
+              <div>
+                <h3 className="font-semibold mb-3">Sprite Gallery</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {Object.entries(gallerySprites).map(([key, value]) => (
+                    <div
+                      key={key}
+                      className="text-center p-3 bg-muted/30 rounded"
+                    >
+                      <img
+                        src={value}
+                        alt={key}
+                        className="w-20 h-20 mx-auto"
+                      />
+                      <p className="text-xs mt-1">{key}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </TabsContent>
 
           <TabsContent value="notes" className="space-y-6 mt-6">
