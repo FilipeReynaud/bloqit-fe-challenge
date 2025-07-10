@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { format } from 'date-fns';
+import { format, compareAsc, compareDesc } from 'date-fns';
 import {
   fetchPokemon,
   exportDataToCSV,
@@ -10,6 +10,7 @@ import {
 } from '@/services/pokemon';
 import { useSearchParamsState } from '@/hooks';
 import { usePokedex } from './pokedex.provider';
+import { CacheService } from '@/services/cache';
 
 interface IPokemonContext {
   pokemonData: PokemonDto[];
@@ -32,7 +33,16 @@ export const PokemonProvider = ({
   const { data, isLoading: isLoadingPokedex } = useQuery<PokemonDto[]>({
     queryKey: ['pokemon-details'],
     queryFn: async (): Promise<PokemonDto[]> => {
-      return await fetchPokemon();
+      const cacheService = CacheService.getInstance();
+      const cachedData = await cacheService.get<PokemonDto[]>('pokemonData');
+
+      if (!cachedData) {
+        const data = await fetchPokemon();
+        await cacheService.set<PokemonDto[]>('pokemonData', data);
+        return data;
+      }
+
+      return cachedData;
     },
   });
 
@@ -68,6 +78,15 @@ export const PokemonProvider = ({
   });
 
   const sortedPokemon = filteredPokemon.sort((pokemon1, pokemon2) => {
+    if (sortBy === 'caught') {
+      const caught1 = caughtPokemon[pokemon1.id]?.timestamp ?? 0;
+      const caught2 = caughtPokemon[pokemon2.id]?.timestamp ?? 0;
+
+      return sortOrder === 'asc'
+        ? compareAsc(caught1, caught2)
+        : compareDesc(caught1, caught2);
+    }
+
     const sortFactor = sortOrder === 'asc' ? 1 : -1;
 
     if (sortBy === 'name')

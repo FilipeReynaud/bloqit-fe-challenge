@@ -19,7 +19,7 @@ const getPokemonDescription = async (speciesUrl: string) => {
 };
 
 export const fetchPokemon = async (): Promise<PokemonDto[]> => {
-  const data: ListPokemonDto = await api.get('pokemon-species?limit=151');
+  const data: ListPokemonDto = await api.get('pokemon-species?limit=1300');
 
   const pokemonDetails = await Promise.all(
     data.results.map(async ({ url }) => {

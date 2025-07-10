@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from 'react';
+import { CacheService } from '@/services/cache';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 type CaughtInfo = {
   timestamp: Date;
@@ -28,6 +29,20 @@ export const PokedexProvider = ({
   const [selectedPokemonIds, setSelectedPokemonIds] = useState<number[]>([]);
   const [caughtPokemon, setCaughtPokemon] = useState<CaughtPokemon>({});
 
+  const cacheService = CacheService.getInstance();
+
+  useEffect(() => {
+    const init = async () => {
+      const initCaughtData = await cacheService.get<CaughtPokemon>(
+        'caughtPokemon'
+      );
+
+      return initCaughtData ?? {};
+    };
+
+    init().then(setCaughtPokemon);
+  }, []);
+
   const selectPokemon = (id: number | number[]) => {
     const idsToSelect = typeof id === 'number' ? [id] : id;
     setSelectedPokemonIds((prev) => [...prev, ...idsToSelect]);
@@ -41,13 +56,18 @@ export const PokedexProvider = ({
   };
 
   const catchPokemon = (id: number) => {
-    setCaughtPokemon((prev) => ({
-      ...prev,
-      [id]: {
-        timestamp: new Date(),
-        notes: '',
-      },
-    }));
+    setCaughtPokemon((prev) => {
+      const newCaughtData = {
+        ...prev,
+        [id]: {
+          timestamp: new Date(),
+          notes: '',
+        },
+      };
+
+      cacheService.set<CaughtPokemon>('caughtPokemon', newCaughtData);
+      return newCaughtData;
+    });
   };
 
   const releasePokemon = (id: number | number[]) => {
@@ -57,19 +77,25 @@ export const PokedexProvider = ({
       idsToRelease.forEach((id) => {
         delete copy[id];
       });
+      cacheService.set<CaughtPokemon>('caughtPokemon', copy);
       return copy;
     });
     unSelectPokemon(idsToRelease);
   };
 
   const onAddNote = (id: number, note: string) => {
-    setCaughtPokemon((prev) => ({
-      ...prev,
-      [id]: {
-        ...prev[id],
-        notes: note,
-      },
-    }));
+    setCaughtPokemon((prev) => {
+      const newCaughtData = {
+        ...prev,
+        [id]: {
+          ...prev[id],
+          notes: note,
+        },
+      };
+
+      cacheService.set<CaughtPokemon>('caughtPokemon', newCaughtData);
+      return newCaughtData;
+    });
   };
 
   return (

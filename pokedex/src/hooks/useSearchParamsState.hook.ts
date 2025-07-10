@@ -3,10 +3,9 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { PokemonType } from '@/shared';
 
-export type SortBy = keyof Pick<
-  PokemonDto,
-  'id' | 'name' | 'height' | 'weight'
->;
+export type SortBy =
+  | keyof Pick<PokemonDto, 'id' | 'name' | 'height' | 'weight'>
+  | 'caught';
 export type SortOrder = 'asc' | 'desc';
 export type ViewMode = 'grid' | 'table';
 
