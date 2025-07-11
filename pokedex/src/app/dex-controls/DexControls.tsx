@@ -55,6 +55,7 @@ export const DexControls = () => {
               value={searchTerm}
               onChange={(e) => updateParam('search', e.target.value)}
               className="pl-10"
+              data-testid="search-input"
             />
           </div>
         </div>
@@ -64,7 +65,7 @@ export const DexControls = () => {
             value={sortBy}
             onValueChange={(v) => updateParam('sortBy', v)}
           >
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-32" data-testid="sort-by-select">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -94,6 +95,7 @@ export const DexControls = () => {
             size="sm"
             onClick={() => updateParam('viewMode', 'grid')}
             className={viewMode === 'grid' ? btnClassNames : ''}
+            data-testid="grid-view-btn"
           >
             <Grid className="w-4 h-4" />
           </Button>
@@ -102,6 +104,7 @@ export const DexControls = () => {
             size="sm"
             onClick={() => updateParam('viewMode', 'table')}
             className={viewMode === 'table' ? btnClassNames : ''}
+            data-testid="table-view-btn"
           >
             <Table className="w-4 h-4" />
           </Button>

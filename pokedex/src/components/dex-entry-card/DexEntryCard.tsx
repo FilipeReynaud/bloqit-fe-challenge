@@ -46,12 +46,26 @@ export const DexEntryCard = ({
   onPokemonClick,
 }: DexEntryCardProps) => {
   return (
-    <Card className="relative cursor-pointer hover:shadow-lg transition-shadow hover:border-red-500">
+    <Card
+      className="relative cursor-pointer hover:shadow-lg transition-shadow hover:border-red-500"
+      data-testid="pokemon-card"
+    >
       <div className="absolute top-2 left-2 z-10">
-        {isCaught && <Checkbox checked={isChecked} onCheckedChange={onCheck} />}
+        {isCaught && (
+          <Checkbox
+            checked={isChecked}
+            onCheckedChange={onCheck}
+            data-testid="pokemon-checkbox"
+          />
+        )}
       </div>
       <div className="absolute top-2 right-2 z-10">
-        <Button variant="ghost" size="sm" onClick={toogleCatch} className="">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={toogleCatch}
+          data-testid="toggle-catch"
+        >
           <Pokeball isCaught={isCaught} />
         </Button>
       </div>
@@ -61,7 +75,12 @@ export const DexEntryCard = ({
           alt={pokemon.name}
           className="w-20 h-20 mx-auto mb-2"
         />
-        <h3 className="font-semibold capitalize">{pokemon.name}</h3>
+        <h3
+          className="font-semibold capitalize"
+          data-testid="pokemon-card-name"
+        >
+          {pokemon.name}
+        </h3>
         <p className="text-sm text-muted-foreground">
           #{pokemon.id.toString().padStart(3, '0')}
         </p>
