@@ -7,4 +7,10 @@ export default {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: 'test-output/jest/coverage',
+  moduleNameMapper: {
+    '^@/lib(.*)$': '<rootDir>/src/lib/$1',
+    '^@/components(.*)$': '<rootDir>/src/components/$1',
+    '^@/services(.*)$': '<rootDir>/src/services/$1',
+    '^@/hooks(.*)$': '<rootDir>/src/hooks/$1',
+  },
 };

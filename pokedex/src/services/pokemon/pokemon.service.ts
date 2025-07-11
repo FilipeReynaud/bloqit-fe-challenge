@@ -2,7 +2,7 @@ import { api } from '@/lib/api';
 import { ExportPokemonDto } from './dtos/export-pokemon.dto';
 import type { ListPokemonDto, PokemonDetailsDto, PokemonDto } from './dtos';
 
-const getPokemonDescription = async (speciesUrl: string) => {
+export const getPokemonDescription = async (speciesUrl: string) => {
   try {
     const pokemonId: string = speciesUrl.split('/')[6];
     const speciesData = await api.get(`pokemon-species/${pokemonId}`);

@@ -1,6 +1,6 @@
 export type CacheKey = 'pokemonData' | 'caughtPokemon';
 
-class IndexedDBWrapper {
+export class IndexedDBWrapper {
   private dbName = 'CacheDB';
   private storeName = 'cacheStore';
   private dbPromise: Promise<IDBDatabase>;
