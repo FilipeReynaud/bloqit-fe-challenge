@@ -5,7 +5,7 @@ import path from 'path';
 
 export default defineConfig(() => ({
   root: __dirname,
-  cacheDir: '../node_modules/.vite/pokedex',
+  cacheDir: '../../node_modules/.vite/pokedex',
   server: {
     port: 4200,
     host: 'localhost',

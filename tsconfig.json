@@ -4,10 +4,10 @@
   "files": [],
   "references": [
     {
-      "path": "./pokedex-e2e"
+      "path": "./apps/pokedex-e2e"
     },
     {
-      "path": "./pokedex"
+      "path": "./apps/pokedex"
     }
   ],
   "ts-node": {

@@ -58,7 +58,7 @@
   },
   "workspaces": [
     "packages/*",
-    "pokedex"
+    "apps/pokedex"
   ],
   "dependencies": {
     "react": "19.0.0",
