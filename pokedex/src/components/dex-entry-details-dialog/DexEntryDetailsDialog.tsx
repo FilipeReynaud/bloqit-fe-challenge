@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { differenceInDays } from 'date-fns';
 import {
   Button,
@@ -71,6 +72,12 @@ export const DexEntryDetailsDialog = ({
   onAddCaughtNote,
   toogleCatch,
 }: DexEntryDetailsDialogProps) => {
+  const [note, setNote] = useState(caughtNotes || '');
+
+  useEffect(() => {
+    setNote(caughtNotes || '');
+  }, [caughtNotes, pokemon.id]);
+
   const isCaught = !!caughtTimestamp;
   const gallerySprites = {
     ...(pokemon.sprites.back_default && { Back: pokemon.sprites.back_default }),
@@ -205,10 +212,11 @@ export const DexEntryDetailsDialog = ({
                 <Textarea
                   placeholder={`Share your memories with this Pokémon ${pokemon.name}`}
                   className="min-h-[120px]"
-                  value={caughtNotes}
-                  onChange={(event) =>
-                    onAddCaughtNote(pokemon.id, event.target.value)
-                  }
+                  value={note}
+                  onChange={(e) => {
+                    setNote(e.target.value);
+                  }}
+                  onBlur={() => onAddCaughtNote(pokemon.id, note)}
                 />
               </div>
             </div>
