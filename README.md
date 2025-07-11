@@ -1,89 +1,104 @@
 # BloqitFeChallenge
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+# Running the Applications and Tests
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+## Prerequisites
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+- **Node.js** (v20 recommended)
+- **npm** (comes with Node.js)
+- All dependencies installed:  
+  ```sh
+  npm install
+  ```
 
-## Finish your CI setup
+---
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/bYvntVXLfn)
+## 1. Running the Pokedex Application
 
-## Generate a library
+The main frontend app is in the `pokedex` directory and uses Vite.
 
+**Start the development server:**
 ```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+npx vite --config pokedex/vite.config.ts
 ```
+- The app will be available at [http://localhost:4200](http://localhost:4200).
 
-## Run tasks
-
-To build the library use:
-
+**Build for production:**
 ```sh
-npx nx build pkg1
+npx vite build --config pokedex/vite.config.ts
 ```
 
-To run any task with Nx use:
-
+**Preview the production build:**
 ```sh
-npx nx <target> <project-name>
+npx vite preview --config pokedex/vite.config.ts
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+---
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## 2. Running Unit Tests
 
-## Versioning and releasing
+Unit tests are written with Jest and are located in the `pokedex` project.
 
-To version and release the library use
-
-```
-npx nx release
-```
-
-Pass `--dry-run` to see what would happen without actually releasing the library.
-
-[Learn more about Nx release &raquo;](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Keep TypeScript project references up to date
-
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
-
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
-
+**Run all unit tests:**
 ```sh
-npx nx sync
+npx jest --config pokedex/jest.config.ts
 ```
 
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
-
+You can also use Nx (if working) to run:
 ```sh
-npx nx sync:check
+npx nx run pokedex:test
 ```
 
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
+---
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## 3. Running End-to-End (E2E) Tests
 
-## Install Nx Console
+E2E tests are in the `pokedex-e2e` directory and use Playwright.
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+**Run E2E tests:**
+```sh
+npx playwright test --config pokedex-e2e/playwright.config.ts
+```
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- This will automatically start the Pokedex app in preview mode at [http://localhost:4200](http://localhost:4200) before running the tests.
+- You can pass Playwright CLI options as needed (e.g., `--headed` for non-headless).
 
-## Useful links
+---
 
-Learn more:
+## 4. Running Storybook (UI Components)
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Storybook is set up in the `pokedex` directory for developing and previewing UI components in isolation.
 
-And join the Nx community:
+**Start Storybook locally:**
+```sh
+cd pokedex
+npx storybook dev -p 6006
+```
+- Storybook will be available at [http://localhost:6006](http://localhost:6006).
 
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
+
+## 4. Useful Nx Commands (if Nx is working)
+
+- **Run the app:**  
+  `npx nx run pokedex:serve`
+- **Run unit tests:**  
+  `npx nx run pokedex:test`
+- **Run E2E tests:**  
+  `npx nx run pokedex-e2e:e2e`
+- **Run Storybook:**  
+  `npx nx run pokedex:storybook`
+
+
+---
+
+## Troubleshooting
+
+- If you see errors related to missing native bindings or Nx plugins, try deleting `node_modules` and reinstalling:
+  ```sh
+  rm -rf node_modules package-lock.json
+  npm install
+  ```
+- Make sure you are using the correct Node.js version.
+
+---
