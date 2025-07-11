@@ -245,7 +245,9 @@ export const columnDefinitions: ColumnDef<PokemonDto>[] = [
             )}
             <DropdownMenuItem
               onClick={() => {
-                table.options.meta?.onClick(row.original);
+                (
+                  table.options.meta as { onClick: (row: PokemonDto) => void }
+                ).onClick(row.original);
               }}
             >
               See Details
