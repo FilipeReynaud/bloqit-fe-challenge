@@ -1,0 +1,28 @@
+# Base image
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Enable Corepack for modern package managers (pnpm, yarn, etc.)
+RUN corepack enable
+
+# Copy root-level files (relative to Docker build context which will be ../)
+COPY ../package.json ../package-lock.json ../nx.json ../tsconfig.json ../tsconfig.base.json ./
+
+# Copy monorepo
+COPY ../apps ./apps
+
+RUN npm install
+
+# Build the Vite app using Nx
+RUN npx vite build --config apps/pokedex/vite.config.ts
+
+# Install static server
+RUN npm install serve -g
+
+# Expose Render-compatible port
+ENV PORT=3000
+
+# Start static site
+CMD ["serve", "-s", "apps/pokedex/dist", "-l", "3000"]
